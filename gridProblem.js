@@ -1,12 +1,14 @@
 
+
+
 // 9,8,4
 // 3,2,5
 // 1,6,7
 
 const grid1 = [
-  [1,2,3],
-  [4,5,6],
-  [7,8,9]
+  [7,2,10],
+  [10,10,10],
+  [10,10,10]
 ];
 
 let compass = [
@@ -20,7 +22,30 @@ let compass = [
   [-1,-1]
 ];
 
+// [1,2,3,[4,5]]
+// [1,2,3,[4,5]]
+
+// making an array equality checker
+let arrayEqualityDetector = function(arr1,arr2) {
+  let isEqual = true;
+  arr1.forEach(function(el,idx) {
+    if(typeof el.constructor == Array && typeof arr2[idx].constructor == Array) {
+      isEqual = arrayEqualityDetector(el,arr2[idx]);
+    } else if(el !== arr2[idx]) {
+      isEqual = false;
+    }
+  });
+  return isEqual;
+};
+
+let dupChecker = function(indexLists,newList) {
+
+};
+
+console.log(arrayEqualityDetector([1,2],[1,3]));
+
 let gridIterator = function(grid) {
+  let solutionIdxs = [];
   let solutions = [];
   let currentVals = [];
   let currentIdxs = [];
@@ -83,8 +108,12 @@ let gridIterator = function(grid) {
               if(currentTotalVal === gridSpaces) {
                 if(!solutions.doesInclude(currentVals)) {
                   solutions.push([]);
+                  solutionIdxs.push([]);
                   currentVals.forEach(function(el) {
                     solutions[solutions.length-1].push(el);
+                  });
+                  currentIdxs.forEach(function(el) {
+                    solutionIdxs[solutionIdxs.length-1].push(el);
                   });
                 }
                 // console.log(currentVals);
@@ -123,6 +152,7 @@ let gridIterator = function(grid) {
   //   console.log(el[0]);
   // });
   console.log(solutions);
+  console.log(solutionIdxs);
 
 };
 
