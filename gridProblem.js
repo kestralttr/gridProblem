@@ -7,7 +7,7 @@
 
 const grid1 = [
   [7,2,10],
-  [10,10,10],
+  [2,7,10],
   [10,10,10]
 ];
 
@@ -38,11 +38,49 @@ let arrayEqualityDetector = function(arr1,arr2) {
   return isEqual;
 };
 
-let dupChecker = function(indexLists,newList) {
+let sampleLists =  [
+  [[1,2],[1,1]],
+  [[2,2],[2,1]]
+];
 
+let sampleNew = [
+  [1,1],[1,3]
+];
+
+//Should look to loop through the indexLists and loop through each array
+//comparing to see if all elements of the array can be found in the
+//newList.  If so, you know they are duplicates.
+let dupChecker = function(indexLists,newList) {
+  let outerMatch = false;
+  let innerMatch = false;
+  for(i=0;i<indexLists.length;i++) {
+    for(j=0;j<indexLists[i].length;j++) {
+      for(k=0;k<newList.length;k++) {
+        if(arrayEqualityDetector(indexLists[i][j],newList[k]) === true) {
+          innerMatch = true;
+          break;
+        }
+      }
+      if(innerMatch === true) {
+        outerMatch = true;
+        innerMatch = false;
+      } else {
+        outerMatch = false;
+      }
+      if(outerMatch === false) {
+        break;
+      }
+    }
+    if(outerMatch === true) {
+      return true;
+    }
+  }
+  return false;
 };
 
-console.log(arrayEqualityDetector([1,2],[1,3]));
+console.log(dupChecker(sampleLists,sampleNew));
+
+// console.log(arrayEqualityDetector([1,2],[1,3]));
 
 let gridIterator = function(grid) {
   let solutionIdxs = [];
@@ -106,7 +144,7 @@ let gridIterator = function(grid) {
               // IF THE ORDER IS DIFFERENT!!!!)
 
               if(currentTotalVal === gridSpaces) {
-                if(!solutions.doesInclude(currentVals)) {
+                if(!solutions.doesInclude(currentVals) && dupChecker(solutionIdxs,currentIdxs) === false) {
                   solutions.push([]);
                   solutionIdxs.push([]);
                   currentVals.forEach(function(el) {
